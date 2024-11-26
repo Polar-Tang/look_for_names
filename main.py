@@ -8,15 +8,17 @@ OUTPUT_FILE = "results.json"
 
 def main():
     skipped_files = []
-    session_cookie = "YOUR_PHP_ID"
+    session_cookie = ""
     keywords = ["cross border"]
     extensions = ["pdf"]
     start = 0
     limit = 1000
     results = []
+    pdf_keywords = ["mercado libre", "TRADE"]
+
 
     print("Querying Greyhat API...")
-    files = query_files(session_cookie, " ".join(keywords), extensions, start=start, limit=limit)
+    files = query_files(session_cookie, " ".join(keywords), ["pdf"])
     if not files:
         print("No results found.")
         return
@@ -35,14 +37,16 @@ def main():
         if not text:
             print(f"Skipping file due to OCR timeout: {url}")
             continue
-        keyword_counts = analyze_pdf_content(text, keywords)
+        keyword_counts = analyze_pdf_content(text, pdf_keywords)
 
 
         print(f"Skipped files: {len(skipped_files)}")
-        results.append({
-            "file": file_info,
-            "keywords": keyword_counts
-        })
+        if any(keyword_counts.values()):  # If any PDF keyword is found
+            results.append({
+                "file": file_info,
+                "keywords": keyword_counts
+            })
+            print(f"Match found in {url}: {keyword_counts}")
 
         # Save incrementally to avoid data loss
         with open(OUTPUT_FILE, "w") as outfile:
