@@ -1,46 +1,52 @@
 import json
-import os
+import asyncio
 from greyhat_api import query_files
-from pdf_processing import download_pdf, extract_text_with_tesseract, analyze_pdf_content
+from pdf_processing import download_pdf_async, extract_text_with_tesseract, analyze_pdf_content
 
 # Define constants
 OUTPUT_FILE = "results.json"
 
-def main():
+async def main():
     skipped_files = []
-    session_cookie = ""
+    session_cookie = "fm81ksj89dh2laan4in2k7gbbs"
     keywords = ["cross border"]
     extensions = ["pdf"]
-    start = 0
-    limit = 1000
-    results = []
     pdf_keywords = ["mercado libre", "TRADE"]
-
+    results = []
 
     print("Querying Greyhat API...")
-    files = query_files(session_cookie, " ".join(keywords), ["pdf"])
+    files = query_files(session_cookie, " ".join(keywords), extensions)
     if not files:
         print("No results found.")
         return
 
-    # Process each file
+    # Process each file asynchronously
     for file_info in files:
-        url = file_info["url"]
+        url = file_info.get("url")
+        if not url:
+            print(f"Skipping file without URL: {file_info}")
+            skipped_files.append(file_info)
+            continue
+
         print(f"Processing file: {url}")
 
-        pdf_file = download_pdf(url)
-        if not pdf_file:
+        # Asynchronously download the PDF
+        pdf_data = await download_pdf_async(url)
+        if not pdf_data:
             print(f"Skipping file due to download failure: {url}")
+            skipped_files.append(file_info)
             continue
 
-        text = extract_text_with_tesseract(pdf_file, timeout=30)
+        # Extract text using Tesseract
+        text = extract_text_with_tesseract(pdf_data)
         if not text:
             print(f"Skipping file due to OCR timeout: {url}")
+            skipped_files.append(file_info)
             continue
+
+        # Analyze the extracted text
         keyword_counts = analyze_pdf_content(text, pdf_keywords)
 
-
-        print(f"Skipped files: {len(skipped_files)}")
         if any(keyword_counts.values()):  # If any PDF keyword is found
             results.append({
                 "file": file_info,
@@ -53,6 +59,7 @@ def main():
             json.dump(results, outfile, indent=4)
 
     print(f"Results saved to {OUTPUT_FILE}")
+    print(f"Skipped files: {len(skipped_files)}")
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())  # Use asyncio.run to execute the async main function
