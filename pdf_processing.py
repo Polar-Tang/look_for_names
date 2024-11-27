@@ -7,21 +7,18 @@ from multiprocessing import Process, Queue
 import asyncio
 import aiohttp
 
-async def download_pdf_async(url):
-    """
-    Download a PDF asynchronously.
-    """
+async def download_pdf_async(url, session):
     try:
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url) as response:
-                if response.status == 200:
-                    return await response.read()
-                else:
-                    print(f"Failed to download {url}")
-                    return None
+        async with session.get(url) as response:
+            if response.status == 200:
+                return await response.read()
+            else:
+                print(f"Failed to download {url}: {response.status}")
+                return None
     except Exception as e:
         print(f"Error downloading {url}: {e}")
         return None
+
 
 def ocr_worker(pdf_bytes, queue):
     """

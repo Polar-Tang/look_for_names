@@ -49,5 +49,39 @@
             "mercado libre": 0,
             "TRADE": 4
         }
+    },
+    {
+        "file": {
+            "id": "15905519",
+            "bucket": "clearlaw.nyc3.digitaloceanspaces.com",
+            "bucketId": 2459,
+            "filename": "CLI-A-Lawyers-Guide-to-U.S.-Taxation-of-Cross-Border-Transactions.pdf",
+            "fullPath": "wpcli/wp-content/uploads/2016/07/03234025/CLI-A-Lawyers-Guide-to-U.S.-Taxation-of-Cross-Border-Transactions.pdf",
+            "url": "https://clearlaw.nyc3.digitaloceanspaces.com/wpcli/wp-content/uploads/2016/07/03234025/CLI-A-Lawyers-Guide-to-U.S.-Taxation-of-Cross-Border-Transactions.pdf",
+            "size": 680954,
+            "type": "dos",
+            "lastModified": 1538628025
+        },
+        "keywords": {
+            "mercado libre": 0,
+            "TRADE": 4
+        }
+    },
+    {
+        "file": {
+            "id": "18706561",
+            "bucket": "clearlaw.nyc3.digitaloceanspaces.com",
+            "bucketId": 2459,
+            "filename": "CLI-CPA\u2019s-Guide-to-Cross-Border-Taxation.pdf",
+            "fullPath": "wpcli/wp-content/uploads/2017/12/03215809/CLI-CPA\u2019s-Guide-to-Cross-Border-Taxation.pdf",
+            "url": "https://clearlaw.nyc3.digitaloceanspaces.com/wpcli/wp-content/uploads/2017/12/03215809/CLI-CPA\u2019s-Guide-to-Cross-Border-Taxation.pdf",
+            "size": 2004330,
+            "type": "dos",
+            "lastModified": 1538621889
+        },
+        "keywords": {
+            "mercado libre": 0,
+            "TRADE": 4
+        }
     }
 ]
